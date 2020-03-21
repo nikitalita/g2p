@@ -37,16 +37,6 @@ def construct_homograph_dictionary():
         homograph2features[headword.lower()] = (pron1.split(), pron2.split(), pos1)
     return homograph2features
 
-# def segment(text):
-#     '''
-#     Splits text into `tokens`.
-#     :param text: A string.
-#     :return: A list of tokens (string).
-#     '''
-#     print(text)
-#     text = re.sub('([.,?!]( |$))', r' \1', text)
-#     print(text)
-#     return text.split()
 
 class G2p(object):
     def __init__(self):
@@ -181,14 +171,3 @@ class G2p(object):
             prons.extend([" "])
 
         return prons[:-1]
-
-if __name__ == '__main__':
-    texts = ["I have $250 in my pocket.", # number -> spell-out
-             "popular pets, e.g. cats and dogs", # e.g. -> for example
-             "I refuse to collect the refuse around here.", # homograph
-             "I'm an activationist."] # newly coined word
-    g2p = G2p()
-    for text in texts:
-        out = g2p(text)
-        print(out)
-
