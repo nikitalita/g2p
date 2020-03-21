@@ -5,11 +5,10 @@ from nltk import pos_tag
 from nltk.tokenize import TweetTokenizer
 
 from .expand import normalize_numbers
-from .g2p_core import G2p
+from .pronunciation import get_pronunciation
 from .utils import chain_with_separator
 
 tokenizer = TweetTokenizer()
-g2p_core = G2p()
 
 
 def strip_accents(text):
@@ -35,6 +34,6 @@ def g2p(text):
     text = preprocess_text(text)
     words = tokenizer.tokenize(text)
     tokens = pos_tag(words)
-    phonemes = [g2p_core.get_pronunciation(*x) for x in tokens]
+    phonemes = [get_pronunciation(*x) for x in tokens]
     phonemes = list(chain_with_separator(phonemes, " "))
     return phonemes

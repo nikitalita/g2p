@@ -4,10 +4,8 @@
 By kyubyong park(kbpark.linguist@gmail.com) and Jongseok Kim(https://github.com/ozmig77)
 https://www.github.com/kyubyong/g2p
 '''
-from nltk.corpus import cmudict
 import nltk
 import numpy as np
-import codecs
 import os
 
 try:
@@ -21,14 +19,6 @@ except LookupError:
 
 dirname = os.path.dirname(__file__)
 
-def construct_homograph_dictionary():
-    f = os.path.join(dirname,'homographs.en')
-    homograph2features = dict()
-    for line in codecs.open(f, 'r', 'utf8').read().splitlines():
-        if line.startswith("#"): continue # comment
-        headword, pron1, pron2, pos1 = line.strip().split("|")
-        homograph2features[headword.lower()] = (pron1.split(), pron2.split(), pos1)
-    return homograph2features
 
 
 class G2p(object):
@@ -50,9 +40,7 @@ class G2p(object):
         self.p2idx = {p: idx for idx, p in enumerate(self.phonemes)}
         self.idx2p = {idx: p for idx, p in enumerate(self.phonemes)}
 
-        self.cmu = cmudict.dict()
         self.load_variables()
-        self.homograph2features = construct_homograph_dictionary()
 
     def load_variables(self):
         self.variables = np.load(os.path.join(dirname,'checkpoint20.npz'))
@@ -127,20 +115,3 @@ class G2p(object):
 
         preds = [self.idx2p.get(idx, "<unk>") for idx in preds]
         return preds
-
-    def get_pronunciation(self, word, pos):
-        if not word.islower():
-            return [word]
-
-        elif word in self.homograph2features:
-            pron1, pron2, pos1 = self.homograph2features[word]
-            if pos.startswith(pos1):
-                return pron1
-            else:
-                return pron2
-
-        elif word in self.cmu:
-            return self.cmu[word][0]
-
-        else:
-            return self.predict(word)
