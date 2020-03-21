@@ -4,18 +4,12 @@
 By kyubyong park(kbpark.linguist@gmail.com) and Jongseok Kim(https://github.com/ozmig77)
 https://www.github.com/kyubyong/g2p
 '''
-from nltk import pos_tag
 from nltk.corpus import cmudict
 import nltk
-from nltk.tokenize import TweetTokenizer
-word_tokenize = TweetTokenizer().tokenize
 import numpy as np
 import codecs
 import re
 import os
-import unicodedata
-from builtins import str as unicode
-from .expand import normalize_numbers
 
 try:
     nltk.data.find('taggers/averaged_perceptron_tagger.zip')
@@ -135,22 +129,7 @@ class G2p(object):
         preds = [self.idx2p.get(idx, "<unk>") for idx in preds]
         return preds
 
-    def __call__(self, text):
-        # preprocessing
-        text = unicode(text)
-        text = normalize_numbers(text)
-        text = ''.join(char for char in unicodedata.normalize('NFD', text)
-                       if unicodedata.category(char) != 'Mn')  # Strip accents
-        text = text.lower()
-        text = re.sub("[^ a-z'.,?!\-]", "", text)
-        text = text.replace("i.e.", "that is")
-        text = text.replace("e.g.", "for example")
-
-        # tokenization
-        words = word_tokenize(text)
-        tokens = pos_tag(words)  # tuples of (word, tag)
-
-        # steps
+    def __call__(self, tokens):
         prons = []
         for word, pos in tokens:
             if re.search("[a-z]", word) is None:
