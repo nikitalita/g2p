@@ -4,3 +4,4 @@ __pychache__
 .pypirc
 dist
 build
+.env
