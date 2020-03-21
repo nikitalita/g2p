@@ -8,7 +8,6 @@ from nltk.corpus import cmudict
 import nltk
 import numpy as np
 import codecs
-import re
 import os
 
 try:
@@ -129,23 +128,27 @@ class G2p(object):
         preds = [self.idx2p.get(idx, "<unk>") for idx in preds]
         return preds
 
+    def get_pronunciation(self, word, pos):
+        if not word.islower():
+            return [word]
+
+        elif word in self.homograph2features:
+            pron1, pron2, pos1 = self.homograph2features[word]
+            if pos.startswith(pos1):
+                return pron1
+            else:
+                return pron2
+
+        elif word in self.cmu:
+            return self.cmu[word][0]
+
+        else:
+            return self.predict(word)
+
     def __call__(self, tokens):
         prons = []
         for word, pos in tokens:
-            if re.search("[a-z]", word) is None:
-                pron = [word]
-
-            elif word in self.homograph2features:  # Check homograph
-                pron1, pron2, pos1 = self.homograph2features[word]
-                if pos.startswith(pos1):
-                    pron = pron1
-                else:
-                    pron = pron2
-            elif word in self.cmu:  # lookup CMU dict
-                pron = self.cmu[word][0]
-            else: # predict for oov
-                pron = self.predict(word)
-
+            pron = self.get_pronunciation(word, pos)
             prons.extend(pron)
             prons.extend([" "])
 
