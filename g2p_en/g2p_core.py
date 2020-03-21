@@ -144,12 +144,3 @@ class G2p(object):
 
         else:
             return self.predict(word)
-
-    def __call__(self, tokens):
-        prons = []
-        for word, pos in tokens:
-            pron = self.get_pronunciation(word, pos)
-            prons.extend(pron)
-            prons.extend([" "])
-
-        return prons[:-1]
