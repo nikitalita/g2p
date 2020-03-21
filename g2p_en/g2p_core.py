@@ -4,18 +4,9 @@
 By kyubyong park(kbpark.linguist@gmail.com) and Jongseok Kim(https://github.com/ozmig77)
 https://www.github.com/kyubyong/g2p
 '''
-import nltk
 import numpy as np
 import os
 
-try:
-    nltk.data.find('taggers/averaged_perceptron_tagger.zip')
-except LookupError:
-    nltk.download('averaged_perceptron_tagger')
-try:
-    nltk.data.find('corpora/cmudict.zip')
-except LookupError:
-    nltk.download('cmudict')
 
 dirname = os.path.dirname(__file__)
 

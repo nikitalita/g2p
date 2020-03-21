@@ -1,14 +1,18 @@
 import re
 import unicodedata
 
-from nltk import pos_tag
-from nltk.tokenize import TweetTokenizer
+import nltk
 
 from .expand import normalize_numbers
 from .pronunciation import get_pronunciation
 from .utils import chain_with_separator
 
-tokenizer = TweetTokenizer()
+try:
+    nltk.data.find("taggers/averaged_perceptron_tagger.zip")
+except LookupError:
+    nltk.download("averaged_perceptron_tagger")
+
+tokenizer = nltk.tokenize.TweetTokenizer()
 
 
 def strip_accents(text):
@@ -33,7 +37,7 @@ def preprocess_text(text):
 def g2p(text):
     text = preprocess_text(text)
     words = tokenizer.tokenize(text)
-    tokens = pos_tag(words)
+    tokens = nltk.pos_tag(words)
     phonemes = [get_pronunciation(*x) for x in tokens]
     phonemes = list(chain_with_separator(phonemes, " "))
     return phonemes
