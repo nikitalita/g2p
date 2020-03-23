@@ -1,7 +1,4 @@
-from pathlib import Path
-
-
-homograph_file = Path(__file__).parent / "homographs.en"
+from .data import homograph_file
 
 homograph_dict = dict()
 with homograph_file.open() as f:

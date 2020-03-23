@@ -5,11 +5,8 @@ By kyubyong park(kbpark.linguist@gmail.com) and Jongseok Kim(https://github.com/
 https://www.github.com/kyubyong/g2p
 '''
 import numpy as np
-import os
 
-
-dirname = os.path.dirname(__file__)
-
+from .data import network_checkpoint
 
 
 class G2p(object):
@@ -34,7 +31,7 @@ class G2p(object):
         self.load_variables()
 
     def load_variables(self):
-        self.variables = np.load(os.path.join(dirname,'checkpoint20.npz'))
+        self.variables = np.load(network_checkpoint)
         self.enc_emb = self.variables["enc_emb"]  # (29, 64). (len(graphemes), emb)
         self.enc_w_ih = self.variables["enc_w_ih"]  # (3*128, 64)
         self.enc_w_hh = self.variables["enc_w_hh"]  # (3*128, 128)
