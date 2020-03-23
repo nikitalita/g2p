@@ -16,11 +16,8 @@ tokenizer = nltk.tokenize.TweetTokenizer()
 
 
 def strip_accents(text):
-    return "".join(
-        char
-        for char in unicodedata.normalize("NFD", text)
-        if unicodedata.category(char) != "Mn"
-    )
+    text = unicodedata.normalize("NFD", text)
+    return "".join(x for x in text if unicodedata.category(x) != "Mn")
 
 
 def preprocess_text(text):
