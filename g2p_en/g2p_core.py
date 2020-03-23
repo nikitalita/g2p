@@ -74,16 +74,11 @@ class G2p(object):
             outputs[:, t, ::] = h
         return outputs
 
-    def encode(self, word):
-        chars = list(word) + ["</s>"]
-        x = [self.g2idx.get(char, self.g2idx["<unk>"]) for char in chars]
-        x = np.take(self.enc_emb, np.expand_dims(x, 0), axis=0)
-
-        return x
-
     def predict(self, word):
         # encoder
-        enc = self.encode(word)
+        chars = list(word) + ["</s>"]
+        x = [self.g2idx.get(char, self.g2idx["<unk>"]) for char in chars]
+        enc = np.take(self.enc_emb, np.expand_dims(x, 0), axis=0)
         enc = self.gru(enc, len(word) + 1, self.enc_w_ih, self.enc_w_hh,
                        self.enc_b_ih, self.enc_b_hh, h0=np.zeros((1, self.enc_w_hh.shape[-1]), np.float32))
         last_hidden = enc[:, -1, :]
