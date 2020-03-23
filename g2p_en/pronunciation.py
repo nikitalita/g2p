@@ -1,8 +1,6 @@
 from .cmudict import query_cmudict
-from .g2p_core import G2p
 from .homograph import query_homograph
-
-g2p_core = G2p()
+from .predict import predict
 
 
 def check_non_word(word):
@@ -17,5 +15,5 @@ def get_pronunciation(word, pos):
         check_non_word(word)
         or query_homograph(word, pos)
         or query_cmudict(word)
-        or g2p_core.predict(word)
+        or predict(word)
     )
