@@ -1,7 +1,7 @@
 [![image](https://img.shields.io/pypi/v/g2p-en.svg)](https://pypi.org/project/g2p-en/)
 [![image](https://img.shields.io/pypi/l/g2p-en.svg)](https://pypi.org/project/g2p-en/)
 
-# g2pE: A Simple Python Module for English Grapheme To Phoneme Conversion
+# g2pE: A Simple Python Module for English Grapheme To Phoneme Conversion 
 
 * [v.2.0] We removed TensorFlow from the dependencies. After all, it changes its APIs quite often, and we don't expect you to have a GPU. Instead, NumPy is used for inference.
 
